@@ -27,7 +27,7 @@ export const refreshTokenMiddleware = (req, res) => {
     res.cookie('accessToken', newAccessToken, {
       httpOnly: true,
       sameSite: 'None',
-      secure: false, // true if using HTTPS
+      secure: true, // true if using HTTPS
     });
 
     res.status(200).json({ message: 'Access token refreshed' });
