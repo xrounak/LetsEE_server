@@ -1,0 +1,68 @@
+<mxfile host="65bd71144e">
+  <diagram name="Backend Architecture" id="backend-arch">
+    <mxGraphModel dx="118487" dy="87518" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+
+        <!-- CLIENT -->
+        <mxCell id="2" value="Client (Browser)" style="shape=swimlane;fillColor=#F0F8FF;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="180" height="500" as="geometry"/>
+        </mxCell>
+
+        <!-- SERVER -->
+        <mxCell id="3" value="Server (Express API)" style="shape=swimlane;fillColor=#F5F5F5;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="200" y="0" width="240" height="500" as="geometry"/>
+        </mxCell>
+
+        <!-- DATABASE -->
+        <mxCell id="4" value="Database (PostgreSQL)" style="shape=cylinder;fillColor=#FFF3CD;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="480" y="200" width="140" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- REGISTER FLOW -->
+        <mxCell id="10" value="1. User submits Register Form" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#007BFF;fontColor=#000000;" edge="1" parent="1" source="2" target="3">
+          <mxGeometry relative="1" y="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="11" value="2. Hash password + Create User" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#007BFF;fontColor=#000000;" edge="1" parent="1" source="3" target="4">
+          <mxGeometry relative="1" y="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="12" value="3. Generate JWT → Set-Cookie" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#007BFF;fontColor=#000000;" edge="1" parent="1" source="3" target="2">
+          <mxGeometry relative="1" y="60" as="geometry"/>
+        </mxCell>
+
+        <!-- LOGIN FLOW -->
+        <mxCell id="13" value="4. User submits Login Form" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#28A745;fontColor=#000000;" edge="1" parent="1" source="2" target="3">
+          <mxGeometry relative="1" y="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="14" value="5. Verify password → Sign JWT" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#28A745;fontColor=#000000;" edge="1" parent="1" source="3" target="4">
+          <mxGeometry relative="1" y="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="15" value="6. Set accessToken cookie" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#28A745;fontColor=#000000;" edge="1" parent="1" source="3" target="2">
+          <mxGeometry relative="1" y="140" as="geometry"/>
+        </mxCell>
+
+        <!-- PROTECTED ROUTE -->
+        <mxCell id="16" value="7. Request with accessToken cookie" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#17A2B8;fontColor=#000000;" edge="1" parent="1" source="2" target="3">
+          <mxGeometry relative="1" y="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="17" value="8. Auth Middleware verifies JWT" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#17A2B8;fontColor=#000000;" edge="1" parent="1" source="3" target="3">
+          <mxGeometry relative="1" y="200" as="geometry"/>
+        </mxCell>
+
+        <!-- LOGOUT FLOW -->
+        <mxCell id="18" value="9. User clicks Logout → POST /logout" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#DC3545;fontColor=#000000;" edge="1" parent="1" source="2" target="3">
+          <mxGeometry relative="1" y="240" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="19" value="10. Clear accessToken cookie" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;strokeColor=#DC3545;fontColor=#000000;" edge="1" parent="1" source="3" target="2">
+          <mxGeometry relative="1" y="260" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

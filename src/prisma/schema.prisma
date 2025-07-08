@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  email         String         @unique
+  password      String
+  createdAt     DateTime       @default(now())
+  name          String
+  updatedAt     DateTime       @updatedAt
+  id            Int            @id @default(autoincrement())
+  role          Role           @default(USER)
+  answers       Answer[]       @relation("UserAnswers")
+  comments      Comment[]      @relation("UserComments")
+  likes         Like[]         @relation("UserLikes")
+  posts         Post[]         @relation("UserPosts")
+  refreshTokens RefreshToken[]
+}
+
+model Post {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  title     String
+  content   String
+  status    PostStatus @default(DRAFT)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  answers   Answer[]   @relation("PostAnswers")
+  comments  Comment[]  @relation("PostComments")
+  likes     Like[]     @relation("PostLikes")
+  user      User       @relation("UserPosts", fields: [userId], references: [id], onDelete: Cascade)
+  postTags  PostTag[]
+}
+
+model Answer {
+  id        Int       @id @default(autoincrement())
+  postId    Int
+  userId    Int
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  post      Post      @relation("PostAnswers", fields: [postId], references: [id], onDelete: Cascade)
+  user      User      @relation("UserAnswers", fields: [userId], references: [id], onDelete: Cascade)
+  comments  Comment[] @relation("AnswerComments")
+  likes     Like[]    @relation("AnswerLikes")
+}
+
+model Comment {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  postId          Int?
+  answerId        Int?
+  parentCommentId Int?
+  content         String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  answer          Answer?   @relation("AnswerComments", fields: [answerId], references: [id], onDelete: Cascade)
+  parentComment   Comment?  @relation("ParentComment", fields: [parentCommentId], references: [id])
+  replies         Comment[] @relation("ParentComment")
+  post            Post?     @relation("PostComments", fields: [postId], references: [id], onDelete: Cascade)
+  user            User      @relation("UserComments", fields: [userId], references: [id], onDelete: Cascade)
+  likes           Like[]    @relation("CommentLikes")
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  postId    Int?
+  answerId  Int?
+  commentId Int?
+  createdAt DateTime @default(now())
+  answer    Answer?  @relation("AnswerLikes", fields: [answerId], references: [id], onDelete: Cascade)
+  comment   Comment? @relation("CommentLikes", fields: [commentId], references: [id], onDelete: Cascade)
+  post      Post?    @relation("PostLikes", fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserLikes", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  postTags PostTag[]
+}
+
+model PostTag {
+  postId Int
+  tagId  Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+}
+
+model RefreshToken {
+  id        Int       @id @default(autoincrement())
+  token     String
+  userId    Int
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
+  expiresAt DateTime? @db.Timestamp(6)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
