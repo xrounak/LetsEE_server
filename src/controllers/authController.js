@@ -55,12 +55,12 @@ export const login = async (req, res) => {
       .cookie("accessToken", accessToken, {
         httpOnly: true,
         sameSite: "None",
-        secure: false,
+        secure: true,
       })
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
         sameSite: "None",
-        secure: false,
+        secure: true,
       })
       .json({
         message: "Logged in",
@@ -102,7 +102,7 @@ export const refresh = (req, res) => {
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       sameSite: "None",
-      secure: false,
+      secure: true,
     });
 
     res.json({ message: "Token refreshed" });
