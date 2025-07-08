@@ -54,12 +54,12 @@ export const login = async (req, res) => {
     res
       .cookie("accessToken", accessToken, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "None",
         secure: false,
       })
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "None",
         secure: false,
       })
       .json({
@@ -101,7 +101,7 @@ export const refresh = (req, res) => {
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "None",
       secure: false,
     });
 

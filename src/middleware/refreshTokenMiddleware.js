@@ -26,7 +26,7 @@ export const refreshTokenMiddleware = (req, res) => {
     // 🍪 Set new access token as HttpOnly cookie
     res.cookie('accessToken', newAccessToken, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'None',
       secure: false, // true if using HTTPS
     });
 
